@@ -44,19 +44,9 @@ class SsoServiceProviderTest extends TestCase
 
     /**
      * @test
-     * @group unit
      */
     public function it_can_be_constructed()
     {
         $this->assertInstanceOf(SsoServiceProvider::class, $this->service_provider);
-    }
-
-    /**
-     * @test
-     * @group unit
-     */
-    public function it_boots_the_service()
-    {
-        $this->assertNull($this->service_provider->boot());
     }
 }

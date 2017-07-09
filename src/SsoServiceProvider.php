@@ -18,7 +18,12 @@ class SsoServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app['router']->group(["middleware" => "auth"], function ($router) {
+            $router->get($this->app['config']->get('services.discourse.route'), [
+                'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
+                'as'   => 'sso.login',
+            ]);
+        });
     }
 
     /**
