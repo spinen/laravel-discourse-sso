@@ -49,4 +49,12 @@ class SsoServiceProviderTest extends TestCase
     {
         $this->assertInstanceOf(SsoServiceProvider::class, $this->service_provider);
     }
+
+    /**
+     * @test
+     */
+    public function it_boots_the_service()
+    {
+        $this->assertNull($this->service_provider->boot());
+    }
 }
