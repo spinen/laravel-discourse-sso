@@ -42,7 +42,7 @@
         "laravel": {
             "providers": [
                 "Spinen\\Discourse\\SsoServiceProvider"
-            ],
+            ]
         }
     },
     "config": {
