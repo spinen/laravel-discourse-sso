@@ -39,18 +39,7 @@ class SsoServiceProviderTest extends TestCase
 
     private function setUpMocks()
     {
-        $this->events_mock = Mockery::mock(Events::class);
-        $this->events_mock->shouldReceive('listen')
-                          ->withAnyArgs()
-                          ->andReturnNull();
-
         $this->application_mock = Mockery::mock(Application::class);
-        $this->application_mock->shouldReceive('offsetGet')
-                               ->zeroOrMoreTimes()
-                               ->with('events')
-                               ->andReturn($this->events_mock);
-
-        $this->purge_command_mock = Mockery::mock(PurgeCommand::class);
     }
 
     /**
@@ -69,6 +58,5 @@ class SsoServiceProviderTest extends TestCase
     public function it_boots_the_service()
     {
         $this->assertNull($this->service_provider->boot());
-        // NOTE: It would be nice to verify that the config got set.
     }
 }
