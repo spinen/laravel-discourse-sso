@@ -207,7 +207,7 @@ class SsoControllerTest extends TestCase
 
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
 
-        $this->assertEquals('http://discourse/session/sso_login?query',$controller->login($this->request_mock));
+        $this->assertEquals('http://discourse/session/sso_login?query', $controller->login($this->request_mock));
     }
 }
 
