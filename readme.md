@@ -17,7 +17,7 @@
 
 ## Prerequisite
 
-As side from Laravel >= 5.1, there is 1 package that is required.
+As side from Laravel >= 5.2, there is 1 package that is required.  NOTE: There are limitations in the way that 5.1 deals with collections, so I am taking the easy way & just not supporting it.  If you need this in 5.1, then please make a merge request on the `SsoController`.
 
 * ["cviebrock/discourse-php": "^0.9.3",](https://github.com/briannesbitt/Carbon)
 

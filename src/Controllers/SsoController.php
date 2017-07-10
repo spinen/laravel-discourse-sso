@@ -7,11 +7,14 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 
 /**
  * Class SsoController
  *
- * Controller to process the Discourse SSO request
+ * Controller to process the Discourse SSO request.  There is a good bit of logic in here that almost feels like too
+ * much for a controller, but given that this is the only thing tht this controller is doing, I am not going to break
+ * it out into some service class.
  *
  * @package Spinen\Discourse
  */
@@ -20,7 +23,7 @@ class SsoController extends Controller
     /**
      * Package configuration
      *
-     * @var array
+     * @var Collection
      */
     protected $config;
 
@@ -30,6 +33,13 @@ class SsoController extends Controller
      * @var SSOHelper
      */
     protected $sso;
+
+    /**
+     * Authenticated user
+     *
+     * @var User
+     */
+    protected $user;
 
     /**
      * SsoController constructor.
@@ -47,27 +57,15 @@ class SsoController extends Controller
     /**
      * Build out the extra parameters to send to Discourse
      *
-     * @param $user
-     *
      * @return array
      */
-    protected function buildExtraParameters(User $user)
+    protected function buildExtraParameters()
     {
-        $parameters = [];
-
-        // Only build array with extra properties (i.e. not external_id & email) & where the property is not null
-        $user_properties = array_where(
-            array_except($this->config['user'], ['external_id', "email"]),
-            function ($value, $key) {
-                return ! is_null($value);
-            }
-        );
-
-        foreach ($user_properties as $key => $property) {
-            $parameters[$key] = $this->parseUserValue($property, $user);
-        }
-
-        return $parameters;
+        return collect($this->config['user'])
+            ->except(['external_id', 'email'])
+            ->reject([$this, 'nullProperty'])
+            ->map([$this, 'parseUserValue'])
+            ->toArray();
     }
 
     /**
@@ -83,16 +81,27 @@ class SsoController extends Controller
             abort(403); //Forbidden
         }
 
-        $user = $request->user();
+        $this->user = $request->user();
 
         $query = $this->sso->getSignInString(
             $this->sso->getNonce($payload),
-            $user->{$this->config['user']['external_id']},
-            $user->{$this->config['user']['email']},
-            $this->buildExtraParameters($user)
+            $this->user->{$this->config['user']['external_id']},
+            $this->user->{$this->config['user']['email']},
+            $this->buildExtraParameters($this->user)
         );
 
         return redirect(str_finish($this->config['url'], '/').'session/sso_login?'.$query);
+    }
+
+    /**
+     * Check to see if property is null
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function nullProperty($property)
+    {
+        return is_null($property);
     }
 
     /**
@@ -100,16 +109,15 @@ class SsoController extends Controller
      *
      * If a string is passed in, then get it from the user object, otherwise, return what was given
      *
-     * @param $property
-     * @param User $user
+     * @param string $property
      * @return mixed
      */
-    public function parseUserValue($property, User $user)
+    public function parseUserValue($property)
     {
         if (! is_string($property)) {
             return $property;
         }
 
-        return $user->{$property};
+        return $this->user->{$property};
     }
 }
