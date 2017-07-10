@@ -29,7 +29,6 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
-  - phpenv config-rm xdebug.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - travis_retry composer self-update
 
