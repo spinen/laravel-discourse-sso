@@ -62,7 +62,7 @@ All of the configuration values are stored in under a `discourse` key in `config
         'suppress_welcome_message' => 'true',
         
         // Where the Discourse form lives
-        'url' => env(DISCOURSE_URL),
+        'url' => env('DISCOURSE_URL'),
         
         // User specific items
         'user' => [
