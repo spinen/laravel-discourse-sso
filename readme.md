@@ -50,7 +50,8 @@ All of the configuration values are stored in under a `discourse` key in `config
 
 ```php
     'discourse' => [
-        // Entrypoint for Discourse to start the SSO process
+        // The route's URI that acts as the entrypoint for Discourse to start the SSO process.
+        // Used by Discourse to route incoming logins.
         'route' => 'discourse/sso',
         
         // Secret string used to encrypt/decrypt SSO information,
