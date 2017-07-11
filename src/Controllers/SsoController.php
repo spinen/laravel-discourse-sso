@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
  * Class SsoController
  *
  * Controller to process the Discourse SSO request.  There is a good bit of logic in here that almost feels like too
- * much for a controller, but given that this is the only thing tht this controller is doing, I am not going to break
+ * much for a controller, but given that this is the only thing that this controller is doing, I am not going to break
  * it out into some service class.
  *
  * @package Spinen\Discourse
