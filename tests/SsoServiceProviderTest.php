@@ -69,7 +69,7 @@ class SsoServiceProviderTest extends TestCase
 
         $this->router_mock->shouldReceive('group')
                           ->once()
-                          ->withArgs([["middleware" => "auth"], Mockery::any()]);
+                          ->withArgs([["middleware" => ["web", "auth"]], Mockery::any()]);
 
         // TODO: Make sure that when the closure is called as expected
         $this->assertNull($this->service_provider->boot());
