@@ -87,7 +87,7 @@ class SsoController extends Controller
             $this->sso->getNonce($payload),
             $this->user->{$this->config['user']['external_id']},
             $this->user->{$this->config['user']['email']},
-            $this->buildExtraParameters($this->user)
+            $this->buildExtraParameters()
         );
 
         return redirect(str_finish($this->config['url'], '/').'session/sso_login?'.$query);
