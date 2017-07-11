@@ -124,9 +124,10 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
 
 ## Left to do
 
-Features that we want to add to the package
-
-* Send `log out` to Discourse when disabling/deleting the user
-* Add group membership configuration to payload
-* Add badges to user
-* Add support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
+* document Discourse configuration
+* send `log out` to Discourse when disabling/deleting the user
+* group membership configuration to payload
+* badges to user
+* support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
+* failed login redirect
+* `return_paths` support
