@@ -19,7 +19,8 @@
     "require": {
         "php": ">=5.5.9",
         "cviebrock/discourse-php": "^0.9.3",
-        "illuminate/support": "~5.1.10|5.2.*|5.3.*|5.4.*"
+        "illuminate/routing": "5.2.*|5.3.*|5.4.*",
+        "illuminate/support": "5.2.*|5.3.*|5.4.*"
     },
     "require-dev": {
         "mockery/mockery": "^0.9.1",
