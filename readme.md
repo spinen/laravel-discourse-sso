@@ -66,8 +66,8 @@ All of the configuration values are stored in under a `discourse` key in `config
         
         // User specific items
         'user' => [
-            // Groups to make sure that the user is part of in a comma separated string
-            // NOTE: Cannot have spaces in the names & the groups must already exist in Discourse
+            // Groups to make sure that the user is part of in a comma-separated string
+            // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
             'add_groups' => null,
 
             // Boolean for user a Discourse admin, leave null to ignore
@@ -95,10 +95,10 @@ All of the configuration values are stored in under a `discourse` key in `config
             // if SiteSetting.sso_overrides_name is set
             'name' => 'name',
 
-            // Groups to make sure that the user is *NOT* part of in a comma separated string
-            // NOTE: Cannot have spaces in the names & the groups must already exist in Discourse
+            // Groups to make sure that the user is *NOT* part of in a comma-separated string
+            // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
             // There is not a way to specify the exact list of groups that a user is in, so
-            // you will may want to send the inverse of the 'add_groups'
+            // you may want to send the inverse of the 'add_groups'
             'remove_groups' => null,
             
             // If the email has not been verified, set this to true
