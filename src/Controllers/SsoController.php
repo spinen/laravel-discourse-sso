@@ -65,7 +65,27 @@ class SsoController extends Controller
             ->except(['external_id', 'email'])
             ->reject([$this, 'nullProperty'])
             ->map([$this, 'parseUserValue'])
+            ->map([$this, 'castBooleansToString'])
             ->toArray();
+    }
+
+    /**
+     * Make boolean's into string
+     *
+     * The Discourse SSO API does not accept 0 or 1 for false or true.  You must send
+     * "false" or "true", so convert any boolean property to the string version.
+     *
+     * @param $property
+     *
+     * @return string
+     */
+    public function castBooleansToString($property)
+    {
+        if (! is_bool($property)) {
+            return $property;
+        }
+
+        return ($property) ? 'true' : 'false';
     }
 
     /**
@@ -87,7 +107,7 @@ class SsoController extends Controller
             $this->sso->getNonce($payload),
             $this->user->{$this->config['user']['external_id']},
             $this->user->{$this->config['user']['email']},
-            $this->buildExtraParameters($this->user)
+            $this->buildExtraParameters()
         );
 
         return redirect(str_finish($this->config['url'], '/').'session/sso_login?'.$query);
