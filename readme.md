@@ -66,9 +66,13 @@ All of the configuration values are stored in under a `discourse` key in `config
         
         // User specific items
         'user' => [
+            // Groups to make sure that the user is part of in a comma seperated string
+            // NOTE: Cannot have spaces in the names & the groups must already exist in Discourse
+            'add_groups' => null,
+
             // Boolean for user a Discourse admin, leave null to ignore
             'admin' => null,
-            
+
             // Full path to user's avatar image
             'avatar_url' => null,
             
@@ -90,6 +94,12 @@ All of the configuration values are stored in under a `discourse` key in `config
             // Full name on Discourse if the user is new or 
             // if SiteSetting.sso_overrides_name is set
             'name' => 'name',
+
+            // Groups to make sure that the user is *NOT* part of in a comma seperated string
+            // NOTE: Cannot have spaces in the names & the groups must already exist in Discourse
+            // There is not a way to specify the exact list of groups that a user is in, so
+            // you will may want to send the inverse of the 'add_groups'
+            'remove_groups' => null,
             
             // If the email has not been verified, set this to true
             'require_activation' => false,
@@ -127,7 +137,6 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
 
 * document Discourse configuration
 * send `log out` to Discourse when disabling/deleting the user
-* group membership configuration to payload
 * badges to user
 * support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
 * failed login redirect
