@@ -197,8 +197,8 @@ class SsoControllerTest extends TestCase
                                       1,
                                       'me@mydomain.tld',
                                       [
-                                          'false_value'  => false,
-                                          'true_value'   => true,
+                                          'false_value'  => 'false',
+                                          'true_value'   => 'true',
                                           'string_value' => 'string_property',
                                       ],
                                   ]
