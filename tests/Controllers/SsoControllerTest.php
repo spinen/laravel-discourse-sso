@@ -49,11 +49,9 @@ class SsoControllerTest extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
-                          ->andReturn(
-                              [
+                          ->andReturn([
                                   'secret' => 'secret',
-                              ]
-                          );
+                              ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -73,11 +71,9 @@ class SsoControllerTest extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
-                          ->andReturn(
-                              [
+                          ->andReturn([
                                   'secret' => 'secret',
-                              ]
-                          );
+                              ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -97,11 +93,9 @@ class SsoControllerTest extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
-                          ->andReturn(
-                              [
+                          ->andReturn([
                                   'secret' => 'secret',
-                              ]
-                          );
+                              ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -136,8 +130,7 @@ class SsoControllerTest extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
-                          ->andReturn(
-                              [
+                          ->andReturn([
                                   'secret' => 'secret',
                                   // Expect the '/' on the end to not double up
                                   'url'    => 'http://discourse/',
@@ -150,8 +143,7 @@ class SsoControllerTest extends TestCase
                                       'true_value'   => true,
                                       'string_value' => 'string',
                                   ],
-                              ]
-                          );
+                              ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -191,8 +183,7 @@ class SsoControllerTest extends TestCase
 
         $this->sso_helper_mock->shouldReceive('getSignInString')
                               ->once()
-                              ->withArgs(
-                                  [
+                              ->withArgs([
                                       'nonce',
                                       1,
                                       'me@mydomain.tld',
@@ -201,8 +192,7 @@ class SsoControllerTest extends TestCase
                                           'true_value'   => 'true',
                                           'string_value' => 'string_property',
                                       ],
-                                  ]
-                              )
+                                  ])
                               ->andReturn('query');
 
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
