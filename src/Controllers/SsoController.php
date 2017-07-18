@@ -49,9 +49,10 @@ class SsoController extends Controller
      */
     public function __construct(Config $config, SSOHelper $sso)
     {
-        $this->config = $config->get('services.discourse');
+        $this->config = collect($config->get('services.discourse'));
+        $this->config->put('user', collect($this->config->get('user')));
 
-        $this->sso = $sso->setSecret($this->config['secret']);
+        $this->sso = $sso->setSecret($this->config->get('secret'));
     }
 
     /**
@@ -61,12 +62,12 @@ class SsoController extends Controller
      */
     protected function buildExtraParameters()
     {
-        return collect($this->config['user'])
-            ->except(['access', 'email', 'external_id'])
-            ->reject([$this, 'nullProperty'])
-            ->map([$this, 'parseUserValue'])
-            ->map([$this, 'castBooleansToString'])
-            ->toArray();
+        return $this->config->get('user')
+                            ->except(['access', 'email', 'external_id'])
+                            ->reject([$this, 'nullProperty'])
+                            ->map([$this, 'parseUserValue'])
+                            ->map([$this, 'castBooleansToString'])
+                            ->toArray();
     }
 
     /**
@@ -98,8 +99,10 @@ class SsoController extends Controller
     public function login(Request $request)
     {
         $this->user = $request->user();
+        $access = $this->config->get('user')
+                               ->get('access', null);
 
-        if (! is_null($access = $this->config['user']['access']) && ! $this->parseUserValue($access)) {
+        if (! is_null($access) && ! $this->parseUserValue($access)) {
             abort(403); //Forbidden
         }
 
@@ -109,12 +112,14 @@ class SsoController extends Controller
 
         $query = $this->sso->getSignInString(
             $this->sso->getNonce($payload),
-            $this->user->{$this->config['user']['external_id']},
-            $this->user->{$this->config['user']['email']},
+            $this->user->{$this->config->get('user')
+                                       ->get('external_id')},
+            $this->user->{$this->config->get('user')
+                                       ->get('email')},
             $this->buildExtraParameters()
         );
 
-        return redirect(str_finish($this->config['url'], '/').'session/sso_login?'.$query);
+        return redirect(str_finish($this->config->get('url'), '/').'session/sso_login?'.$query);
     }
 
     /**

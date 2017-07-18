@@ -118,6 +118,40 @@ class SsoControllerTest extends TestCase
      * @expectedException Exception
      * @expectedExceptionCode 403
      */
+    public function it_is_backwards_compatible_with_config_that_does_not_have_access_key()
+    {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->with('services.discourse')
+                          ->andReturn([
+                              'secret' => 'secret',
+                          ]);
+
+        $this->request_mock->shouldReceive('user')
+                           ->once()
+                           ->withNoArgs()
+                           ->andReturn($this->user_mock);
+
+        $this->request_mock->shouldReceive('get')
+                           ->withAnyArgs()
+                           ->andReturn('anything');
+
+        $this->sso_helper_mock->shouldReceive('validatePayload')
+                              ->once()
+                              ->withAnyArgs()
+                              ->andReturn(false); // Stop test here, as we know that we got past the access key
+
+        $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
+
+        $controller->login($this->request_mock);
+
+    }
+
+    /**
+     * @test
+     * @expectedException Exception
+     * @expectedExceptionCode 403
+     */
     public function it_aborts_if_the_user_does_not_have_access()
     {
         $this->config_mock->shouldReceive('get')
@@ -155,7 +189,6 @@ class SsoControllerTest extends TestCase
                               // Expect the '/' on the end to not double up
                               'url'    => 'http://discourse/',
                               'user'   => [
-                                  'access'       => null,
                                   'external_id'  => 'id',
                                   'email'        => 'email',
                                   // Expect this null_value to not be passed on
@@ -175,11 +208,6 @@ class SsoControllerTest extends TestCase
                            ->withNoArgs()
                            ->andReturn($this->user_mock);
 
-        $this->sso_helper_mock->shouldReceive('validatePayload')
-                              ->once()
-                              ->withArgs(['sso', 'sig'])
-                              ->andReturn(true);
-
         $this->request_mock->shouldReceive('get')
                            ->once()
                            ->with('sso')
@@ -189,6 +217,11 @@ class SsoControllerTest extends TestCase
                            ->once()
                            ->with('sig')
                            ->andReturn('sig');
+
+        $this->sso_helper_mock->shouldReceive('validatePayload')
+                              ->once()
+                              ->withArgs(['sso', 'sig'])
+                              ->andReturn(true);
 
         $this->sso_helper_mock->shouldReceive('getNonce')
                               ->once()
