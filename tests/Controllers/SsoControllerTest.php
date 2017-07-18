@@ -27,6 +27,11 @@ class SsoControllerTest extends TestCase
      */
     protected $sso_helper_mock;
 
+    /**
+     * @var Mockery\Mock
+     */
+    protected $user_mock;
+
     public function setUp()
     {
         parent::setUp();
@@ -37,8 +42,16 @@ class SsoControllerTest extends TestCase
     private function setUpMocks()
     {
         $this->config_mock = Mockery::mock(Config::class);
+
         $this->request_mock = Mockery::mock(Request::class);
+
         $this->sso_helper_mock = Mockery::mock(SSOHelper::class);
+        $this->sso_helper_mock->shouldReceive('setSecret')
+                              ->once()
+                              ->with('secret')
+                              ->andReturnSelf();
+
+        $this->user_mock = Mockery::mock(SSOHelper::class);
     }
 
     /**
@@ -50,8 +63,8 @@ class SsoControllerTest extends TestCase
                           ->once()
                           ->with('services.discourse')
                           ->andReturn([
-                                  'secret' => 'secret',
-                              ]);
+                              'secret' => 'secret',
+                          ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -72,8 +85,8 @@ class SsoControllerTest extends TestCase
                           ->once()
                           ->with('services.discourse')
                           ->andReturn([
-                                  'secret' => 'secret',
-                              ]);
+                              'secret' => 'secret',
+                          ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -94,8 +107,8 @@ class SsoControllerTest extends TestCase
                           ->once()
                           ->with('services.discourse')
                           ->andReturn([
-                                  'secret' => 'secret',
-                              ]);
+                              'secret' => 'secret',
+                          ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -124,6 +137,35 @@ class SsoControllerTest extends TestCase
 
     /**
      * @test
+     * @expectedException Exception
+     * @expectedExceptionCode 403
+     */
+    public function it_aborts_if_the_user_does_not_have_access()
+    {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->with('services.discourse')
+                          ->andReturn([
+                              'secret' => 'secret',
+                              'user'   => [
+                                  'access' => 'forum_access',
+                              ],
+                          ]);
+
+        $this->user_mock->forum_access = false;
+
+        $this->request_mock->shouldReceive('user')
+                           ->once()
+                           ->withNoArgs()
+                           ->andReturn($this->user_mock);
+
+        $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
+
+        $controller->login($this->request_mock);
+    }
+
+    /**
+     * @test
      */
     public function it_builds_the_correct_payload()
     {
@@ -131,19 +173,19 @@ class SsoControllerTest extends TestCase
                           ->once()
                           ->with('services.discourse')
                           ->andReturn([
-                                  'secret' => 'secret',
-                                  // Expect the '/' on the end to not double up
-                                  'url'    => 'http://discourse/',
-                                  'user'   => [
-                                      'external_id'  => 'id',
-                                      'email'        => 'email',
-                                      // Expect this null_value to not be passed on
-                                      'null_value'   => null,
-                                      'false_value'  => false,
-                                      'true_value'   => true,
-                                      'string_value' => 'string',
-                                  ],
-                              ]);
+                              'secret' => 'secret',
+                              // Expect the '/' on the end to not double up
+                              'url'    => 'http://discourse/',
+                              'user'   => [
+                                  'external_id'  => 'id',
+                                  'email'        => 'email',
+                                  // Expect this null_value to not be passed on
+                                  'null_value'   => null,
+                                  'false_value'  => false,
+                                  'true_value'   => true,
+                                  'string_value' => 'string',
+                              ],
+                          ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
@@ -184,15 +226,15 @@ class SsoControllerTest extends TestCase
         $this->sso_helper_mock->shouldReceive('getSignInString')
                               ->once()
                               ->withArgs([
-                                      'nonce',
-                                      1,
-                                      'me@mydomain.tld',
-                                      [
-                                          'false_value'  => 'false',
-                                          'true_value'   => 'true',
-                                          'string_value' => 'string_property',
-                                      ],
-                                  ])
+                                  'nonce',
+                                  1,
+                                  'me@mydomain.tld',
+                                  [
+                                      'false_value'  => 'false',
+                                      'true_value'   => 'true',
+                                      'string_value' => 'string_property',
+                                  ],
+                              ])
                               ->andReturn('query');
 
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
