@@ -51,7 +51,7 @@ class SsoControllerTest extends TestCase
                               ->with('secret')
                               ->andReturnSelf();
 
-        $this->user_mock = Mockery::mock(SSOHelper::class);
+        $this->user_mock = Mockery::mock(User::class);
     }
 
     /**
