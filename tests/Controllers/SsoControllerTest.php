@@ -76,7 +76,7 @@ class SsoControllerTest extends TestCase
      * @expectedException Exception
      * @expectedExceptionCode 403
      */
-    public function it_aborts_if_the_paylod_is_invalid()
+    public function it_aborts_if_the_payload_is_invalid()
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
