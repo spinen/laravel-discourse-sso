@@ -66,34 +66,9 @@ class SsoControllerTest extends TestCase
                               'secret' => 'secret',
                           ]);
 
-        $this->sso_helper_mock->shouldReceive('setSecret')
-                              ->once()
-                              ->withAnyArgs()
-                              ->andReturnSelf();
-
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
 
         $this->assertInstanceOf(SsoController::class, $controller);
-    }
-
-    /**
-     * @test
-     */
-    public function it_uses_the_configured_secret_with_the_helper()
-    {
-        $this->config_mock->shouldReceive('get')
-                          ->once()
-                          ->with('services.discourse')
-                          ->andReturn([
-                              'secret' => 'secret',
-                          ]);
-
-        $this->sso_helper_mock->shouldReceive('setSecret')
-                              ->once()
-                              ->with('secret')
-                              ->andReturnSelf();
-
-        new SsoController($this->config_mock, $this->sso_helper_mock);
     }
 
     /**
@@ -108,17 +83,15 @@ class SsoControllerTest extends TestCase
                           ->with('services.discourse')
                           ->andReturn([
                               'secret' => 'secret',
+                              'user'   => [
+                                  'access' => null,
+                              ],
                           ]);
 
-        $this->sso_helper_mock->shouldReceive('setSecret')
-                              ->once()
-                              ->withAnyArgs()
-                              ->andReturnSelf();
-
-        $this->sso_helper_mock->shouldReceive('validatePayload')
-                              ->once()
-                              ->withArgs(['sso', 'sig'])
-                              ->andReturn(false);
+        $this->request_mock->shouldReceive('user')
+                           ->once()
+                           ->withNoArgs()
+                           ->andReturn($this->user_mock);
 
         $this->request_mock->shouldReceive('get')
                            ->once()
@@ -129,6 +102,11 @@ class SsoControllerTest extends TestCase
                            ->once()
                            ->with('sig')
                            ->andReturn('sig');
+
+        $this->sso_helper_mock->shouldReceive('validatePayload')
+                              ->once()
+                              ->withArgs(['sso', 'sig'])
+                              ->andReturn(false);
 
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
 
@@ -177,6 +155,7 @@ class SsoControllerTest extends TestCase
                               // Expect the '/' on the end to not double up
                               'url'    => 'http://discourse/',
                               'user'   => [
+                                  'access'       => null,
                                   'external_id'  => 'id',
                                   'email'        => 'email',
                                   // Expect this null_value to not be passed on
@@ -187,10 +166,14 @@ class SsoControllerTest extends TestCase
                               ],
                           ]);
 
-        $this->sso_helper_mock->shouldReceive('setSecret')
-                              ->once()
-                              ->withAnyArgs()
-                              ->andReturnSelf();
+        $this->user_mock->id = 1;
+        $this->user_mock->email = 'me@mydomain.tld';
+        $this->user_mock->string = 'string_property';
+
+        $this->request_mock->shouldReceive('user')
+                           ->once()
+                           ->withNoArgs()
+                           ->andReturn($this->user_mock);
 
         $this->sso_helper_mock->shouldReceive('validatePayload')
                               ->once()
@@ -207,21 +190,10 @@ class SsoControllerTest extends TestCase
                            ->with('sig')
                            ->andReturn('sig');
 
-        $user_mock = Mockery::mock(User::class);
-
-        $this->request_mock->shouldReceive('user')
-                           ->once()
-                           ->withNoArgs()
-                           ->andReturn($user_mock);
-
         $this->sso_helper_mock->shouldReceive('getNonce')
                               ->once()
                               ->with('sso')
                               ->andReturn('nonce');
-
-        $user_mock->id = 1;
-        $user_mock->email = 'me@mydomain.tld';
-        $user_mock->string = 'string_property';
 
         $this->sso_helper_mock->shouldReceive('getSignInString')
                               ->once()
