@@ -62,7 +62,7 @@ class SsoController extends Controller
     protected function buildExtraParameters()
     {
         return collect($this->config['user'])
-            ->except(['external_id', 'email'])
+            ->except(['access', 'email', 'external_id'])
             ->reject([$this, 'nullProperty'])
             ->map([$this, 'parseUserValue'])
             ->map([$this, 'castBooleansToString'])
@@ -97,11 +97,15 @@ class SsoController extends Controller
      */
     public function login(Request $request)
     {
-        if (! ($this->sso->validatePayload($payload = $request->get('sso'), $request->get('sig')))) {
+        $this->user = $request->user();
+
+        if (! is_null($access = $this->config['user']['access']) && ! $this->parseUserValue($access)) {
             abort(403); //Forbidden
         }
 
-        $this->user = $request->user();
+        if (! ($this->sso->validatePayload($payload = $request->get('sso'), $request->get('sig')))) {
+            abort(403); //Forbidden
+        }
 
         $query = $this->sso->getSignInString(
             $this->sso->getNonce($payload),
