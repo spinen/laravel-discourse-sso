@@ -112,10 +112,10 @@ class SsoController extends Controller
 
         $query = $this->sso->getSignInString(
             $this->sso->getNonce($payload),
-            $this->user->{$this->config->get('user')
-                                       ->get('external_id')},
-            $this->user->{$this->config->get('user')
-                                       ->get('email')},
+            $this->parseUserValue($this->config->get('user')
+                                               ->get('external_id')),
+            $this->parseUserValue($this->config->get('user')
+                                               ->get('email')),
             $this->buildExtraParameters()
         );
 
