@@ -65,7 +65,11 @@ All of the configuration values are stored in under a `discourse` key in `config
         'url' => env('DISCOURSE_URL'),
         
         // User specific items
+        // NOTE: The 'email' & 'external_id' are the only 2 required fields
         'user' => [
+            // Check to see if the user has forum access & should be logged in via SSO
+            'access' => null,
+        
             // Groups to make sure that the user is part of in a comma-separated string
             // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
             'add_groups' => null,
