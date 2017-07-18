@@ -3,6 +3,7 @@
 namespace Spinen\Discourse;
 
 use ArrayAccess as Application;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\Registrar as Router;
 use Illuminate\Support\ServiceProvider;
 use Mockery;
@@ -13,6 +14,11 @@ class SsoServiceProviderTest extends TestCase
      * @var Mockery\Mock
      */
     protected $application_mock;
+
+    /**
+     * @var Mockery\Mock
+     */
+    protected $config_mock;
 
     /**
      * @var Mockery\Mock
@@ -46,6 +52,7 @@ class SsoServiceProviderTest extends TestCase
     private function setUpMocks()
     {
         $this->application_mock = Mockery::mock(Application::class);
+        $this->config_mock = Mockery::mock(Config::class);
         $this->router_mock = Mockery::mock(Router::class);
     }
 
@@ -67,11 +74,42 @@ class SsoServiceProviderTest extends TestCase
                                ->with('router')
                                ->andReturn($this->router_mock);
 
+        $this->application_mock->shouldReceive('offsetGet')
+                               ->once()
+                               ->with('config')
+                               ->andReturn($this->config_mock);
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.route')
+                          ->once()
+                          ->andReturn('route');
+
+        $this->router_mock->shouldReceive('get')
+                          ->withArgs(
+                              [
+                                  'route',
+                                  [
+                                      'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
+                                      'as'   => 'sso.login',
+                                  ],
+                              ]
+                          )
+                          ->once()
+                          ->andReturnNull();
+
+        $route_closure = Mockery::on(
+            function ($closure) {
+
+                $closure($this->router_mock);
+
+                return true;
+            }
+        );
+
         $this->router_mock->shouldReceive('group')
                           ->once()
-                          ->withArgs([["middleware" => ["web", "auth"]], Mockery::any()]);
+                          ->withArgs([["middleware" => ["web", "auth"]], $route_closure]);
 
-        // TODO: Make sure that when the closure is called as expected
         $this->assertNull($this->service_provider->boot());
     }
 }
