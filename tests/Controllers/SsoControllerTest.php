@@ -131,21 +131,19 @@ class SsoControllerTest extends TestCase
                           ->once()
                           ->with('services.discourse')
                           ->andReturn([
-                              'secret' => 'secret',
-                              // Expect the '/' on the end to not double up
-                              'url'    => 'http://discourse/',
-                              'user'   => [
-                                  'external_id' => 'id',
-                                  'email'       => 'email',
-                                  // Expect this null_value to not be passed on
-                                  'null_value'  => null,
-                                  'false_value' => false,
-                                  'true_value'  => true,
-                                  z
+                                  'secret' => 'secret',
+                                  // Expect the '/' on the end to not double up
+                                  'url'    => 'http://discourse/',
+                                  'user'   => [
+                                      'external_id'  => 'id',
+                                      'email'        => 'email',
+                                      // Expect this null_value to not be passed on
+                                      'null_value'   => null,
+                                      'false_value'  => false,
+                                      'true_value'   => true,
                                       'string_value' => 'string',
                                   ],
-                              ]
-                          );
+                              ]);
 
         $this->sso_helper_mock->shouldReceive('setSecret')
                               ->once()
