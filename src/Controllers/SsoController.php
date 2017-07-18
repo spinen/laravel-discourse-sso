@@ -49,8 +49,7 @@ class SsoController extends Controller
      */
     public function __construct(Config $config, SSOHelper $sso)
     {
-        $this->config = collect($config->get('services.discourse'));
-        $this->config->put('user', collect($this->config->get('user')));
+        $this->loadConfigs($config);
 
         $this->sso = $sso->setSecret($this->config->get('secret'));
     }
@@ -87,6 +86,19 @@ class SsoController extends Controller
         }
 
         return ($property) ? 'true' : 'false';
+    }
+
+    /**
+     * Cache the configs on the object as a collection
+     *
+     * The 'user' property will be an array, so go ahead and convert it to a collection
+     *
+     * @param Config $config
+     */
+    protected function loadConfigs(Config $config)
+    {
+        $this->config = collect($config->get('services.discourse'));
+        $this->config->put('user', collect($this->config->get('user')));
     }
 
     /**
