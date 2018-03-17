@@ -112,12 +112,4 @@ class SsoServiceProviderTest extends TestCase
 
         $this->assertNull($this->service_provider->boot());
     }
-
-    /**
-     * @test
-     */
-    public function it_does_nothing_when_registering()
-    {
-        $this->service_provider->register();
-    }
 }
