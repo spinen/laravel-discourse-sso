@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/stable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![Total Downloads](https://poser.pugx.org/spinen/laravel-discourse-sso/downloads)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![Latest Unstable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/unstable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
-[![Dependency Status](https://www.versioneye.com/php/spinen:laravel-discourse-sso/0.1.1/badge.svg)](https://www.versioneye.com/php/spinen:laravel-discourse-sso/0.1.1)
+[![Dependency Status](https://gemnasium.com/spinen/laravel-discourse-sso.svg)](https://gemnasium.com/spinen/laravel-discourse-sso)
 [![License](https://poser.pugx.org/spinen/laravel-discourse-sso/license)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 
 [Discourse](https://www.discourse.org) is a great online forum software that supports Single Sign On ([SSO](https://meta.discourse.org/t/official-single-sign-on-for-discourse/13045)).  There is a great PHP library that handles all of the heavy lifting to make the SSO work called [cviebrock/discourse-php](https://github.com/cviebrock/discourse-php), which this package uses.  This package is loosely based on the work done by [jaewun/discourse-sso-laravel](https://github.com/jaewun/discourse-sso-laravel).
