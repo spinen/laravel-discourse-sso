@@ -40,7 +40,7 @@ class SsoServiceProviderTest extends TestCase
      */
     protected $service_provider;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
