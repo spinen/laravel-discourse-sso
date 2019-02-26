@@ -32,7 +32,7 @@ class SsoControllerTest extends TestCase
      */
     protected $user_mock;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -73,11 +73,12 @@ class SsoControllerTest extends TestCase
 
     /**
      * @test
-     * @expectedException Exception
-     * @expectedExceptionCode 403
      */
     public function it_aborts_if_the_payload_is_invalid()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(403);
+
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
@@ -115,11 +116,12 @@ class SsoControllerTest extends TestCase
 
     /**
      * @test
-     * @expectedException Exception
-     * @expectedExceptionCode 403
      */
     public function it_is_backwards_compatible_with_config_that_does_not_have_access_key()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(403);
+
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
@@ -149,11 +151,12 @@ class SsoControllerTest extends TestCase
 
     /**
      * @test
-     * @expectedException Exception
-     * @expectedExceptionCode 403
      */
     public function it_aborts_if_the_user_does_not_have_access()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(403);
+
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->with('services.discourse')
