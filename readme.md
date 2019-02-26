@@ -3,7 +3,6 @@
 [![Latest Stable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/stable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![Total Downloads](https://poser.pugx.org/spinen/laravel-discourse-sso/downloads)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![Latest Unstable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/unstable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
-[![Dependency Status](https://gemnasium.com/spinen/laravel-discourse-sso.svg)](https://gemnasium.com/spinen/laravel-discourse-sso)
 [![License](https://poser.pugx.org/spinen/laravel-discourse-sso/license)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 
 [Discourse](https://www.discourse.org) is a great online forum software that supports Single Sign On ([SSO](https://meta.discourse.org/t/official-single-sign-on-for-discourse/13045)).  There is a great PHP library that handles all of the heavy lifting to make the SSO work called [cviebrock/discourse-php](https://github.com/cviebrock/discourse-php), which this package uses.  This package is loosely based on the work done by [jaewun/discourse-sso-laravel](https://github.com/jaewun/discourse-sso-laravel).
@@ -12,12 +11,14 @@
 
 | Branch | Status | Coverage | Code Quality |
 | ------ | :----: | :------: | :----------: |
-| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-discourse-sso.svg?branch=develop)](https://travis-ci.org/spinen/laravel-discourse-sso) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-discourse-sso/badge.svg?branch=develop&service=github)](https://coveralls.io/github/spinen/laravel-discourse-sso?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=develop) |
-| Master | [![Build Status](https://travis-ci.org/spinen/laravel-discourse-sso.svg?branch=master)](https://travis-ci.org/spinen/laravel-discourse-sso) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-discourse-sso/badge.svg?branch=master&service=github)](https://coveralls.io/github/spinen/laravel-discourse-sso?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=master) |
+| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-discourse-sso.svg?branch=develop)](https://travis-ci.org/spinen/laravel-discourse-sso) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=develop) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-discourse-sso.svg?branch=master)](https://travis-ci.org/spinen/laravel-discourse-sso) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-discourse-sso/?branch=master) |
 
 ## Prerequisite
 
-Aside from Laravel >= 5.2, there is 1 package that is required.  NOTE: There are limitations in the way that 5.1 deals with collections, so I am taking the easy way & just not supporting it.  If you need this in 5.1, then please make a merge request on the `SsoController`.
+#### NOTE: If you need to use < php7.2, please stay with version 1.x
+
+Aside from Laravel >= 5.5, there is 1 package that is required.
 
 * ["cviebrock/discourse-php": "^0.9.3",](https://github.com/cviebrock/discourse-php)
 
@@ -29,20 +30,7 @@ Install Discourse SSO for Laravel:
     $ composer require spinen/laravel-discourse-sso
 ```
 
-### For >= Laravel 5.5, you are done with the Install
-
 The package uses the auto registration feature
-
-### For < Laravel 5.5, you have to register the Service Provider
-
-Add the Service Provider to `config/app.php`:
-
-```php
-    'providers' => [
-        // ...
-        Spinen\Discourse\SsoServiceProvider::class,
-    ];
-```
 
 ## Configuration
 
