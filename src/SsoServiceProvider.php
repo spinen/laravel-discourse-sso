@@ -8,7 +8,7 @@ use Illuminate\Contracts\Routing\Registrar as Router;
 /**
  * Class SsoServiceProvider
  *
- * @package Spinen\GarbageMan
+ * @package Spinen\Discourse
  */
 class SsoServiceProvider extends ServiceProvider
 {

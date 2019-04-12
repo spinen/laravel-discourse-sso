@@ -8,6 +8,11 @@ use Illuminate\Contracts\Routing\Registrar as Router;
 use Illuminate\Support\ServiceProvider;
 use Mockery;
 
+/**
+ * Class SsoServiceProviderTest
+ *
+ * @package Spinen\Discourse
+ */
 class SsoServiceProviderTest extends TestCase
 {
     /**
