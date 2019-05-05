@@ -80,9 +80,14 @@ class SsoServiceProviderTest extends TestCase
                                ->andReturn($this->router_mock);
 
         $this->application_mock->shouldReceive('offsetGet')
-                               ->once()
+                               ->twice()
                                ->with('config')
                                ->andReturn($this->config_mock);
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.middleware', ['web', 'auth'])
+                          ->once()
+                          ->andReturn(['middleware']);
 
         $this->config_mock->shouldReceive('get')
                           ->with('services.discourse.route')
@@ -113,7 +118,7 @@ class SsoServiceProviderTest extends TestCase
 
         $this->router_mock->shouldReceive('group')
                           ->once()
-                          ->withArgs([["middleware" => ["web", "auth"]], $route_closure]);
+                          ->withArgs([['middleware' => ['middleware']], $route_closure]);
 
         $this->assertNull($this->service_provider->boot());
     }
