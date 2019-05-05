@@ -38,6 +38,9 @@ All of the configuration values are stored in under a `discourse` key in `config
 
 ```php
     'discourse' => [
+        // Middleware for the route
+        'middleware' => ['web','auth'],
+    
         // The route's URI that acts as the entry point for Discourse to start the SSO process.
         // Used by Discourse to route incoming logins.
         'route' => 'discourse/sso',
