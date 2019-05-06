@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 use Mockery;
 use Spinen\Discourse\TestCase;
 
+/**
+ * Class SsoControllerTest
+ *
+ * @package Spinen\Discourse\Controllers
+ */
 class SsoControllerTest extends TestCase
 {
     /**

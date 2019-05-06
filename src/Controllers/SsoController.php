@@ -14,9 +14,9 @@ use Illuminate\Support\Collection;
  *
  * Controller to process the Discourse SSO request.  There is a good bit of logic in here that almost feels like too
  * much for a controller, but given that this is the only thing that this controller is doing, I am not going to break
- * it out into some service class.
+ * it out into a service class.
  *
- * @package Spinen\Discourse
+ * @package Spinen\Discourse\Controllers
  */
 class SsoController extends Controller
 {
@@ -107,6 +107,7 @@ class SsoController extends Controller
      * @param Request $request
      *
      * @return mixed
+     * @throws 403
      */
     public function login(Request $request)
     {

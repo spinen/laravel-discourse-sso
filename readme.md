@@ -1,8 +1,8 @@
 # SPINEN's Discourse SSO for Laravel
 
 [![Latest Stable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/stable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
-[![Total Downloads](https://poser.pugx.org/spinen/laravel-discourse-sso/downloads)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![Latest Unstable Version](https://poser.pugx.org/spinen/laravel-discourse-sso/v/unstable)](https://packagist.org/packages/spinen/laravel-discourse-sso)
+[![Total Downloads](https://poser.pugx.org/spinen/laravel-discourse-sso/downloads)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 [![License](https://poser.pugx.org/spinen/laravel-discourse-sso/license)](https://packagist.org/packages/spinen/laravel-discourse-sso)
 
 [Discourse](https://www.discourse.org) is a great online forum software that supports Single Sign On ([SSO](https://meta.discourse.org/t/official-single-sign-on-for-discourse/13045)).  There is a great PHP library that handles all of the heavy lifting to make the SSO work called [cviebrock/discourse-php](https://github.com/cviebrock/discourse-php), which this package uses.  This package is loosely based on the work done by [jaewun/discourse-sso-laravel](https://github.com/jaewun/discourse-sso-laravel).
@@ -16,7 +16,7 @@
 
 ## Prerequisite
 
-#### NOTE: If you need to use < php7.2, please stay with version 1.x
+#### NOTE: If you need to use < PHP 7.2, please stay with version 1.x
 
 Aside from Laravel >= 5.5, there is 1 package that is required.
 
@@ -27,10 +27,10 @@ Aside from Laravel >= 5.5, there is 1 package that is required.
 Install Discourse SSO for Laravel:
 
 ```bash
-    $ composer require spinen/laravel-discourse-sso
+$ composer require spinen/laravel-discourse-sso
 ```
 
-The package uses the auto registration feature
+The package uses the [auto registration feature](https://laravel.com/docs/5.8/packages#package-discovery) of Laravel 5.
 
 ## Configuration
 
@@ -38,7 +38,10 @@ All of the configuration values are stored in under a `discourse` key in `config
 
 ```php
     'discourse' => [
-        // The route's URI that acts as the entrypoint for Discourse to start the SSO process.
+        // Middleware for the SSO login route to use
+        'middleware' => ['web', 'auth'],
+    
+        // The route's URI that acts as the entry point for Discourse to start the SSO process.
         // Used by Discourse to route incoming logins.
         'route' => 'discourse/sso',
         
@@ -49,20 +52,20 @@ All of the configuration values are stored in under a `discourse` key in `config
         // Disable Discourse from sending welcome message
         'suppress_welcome_message' => 'true',
         
-        // Where the Discourse form lives
+        // Where the Discourse forum lives
         'url' => env('DISCOURSE_URL'),
         
-        // User specific items
+        // User-specific items
         // NOTE: The 'email' & 'external_id' are the only 2 required fields
         'user' => [
             // Check to see if the user has forum access & should be logged in via SSO
             'access' => null,
         
-            // Groups to make sure that the user is part of in a comma-separated string
+            // Discourse Groups to make sure that the user is part of in a comma-separated string
             // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
             'add_groups' => null,
 
-            // Boolean for user a Discourse admin, leave null to ignore
+            // Boolean for making the user a Discourse admin. Leave null to ignore
             'admin' => null,
 
             // Full path to user's avatar image
@@ -77,17 +80,17 @@ All of the configuration values are stored in under a `discourse` key in `config
             // Verified email address (see "require_activation" if not verified)
             'email' => 'email',
             
-            // Unique string to the user that will never change
+            // Unique string for the user that will never change
             'external_id' => 'id',
             
-            // Boolean for user a Discourse admin, leave null to ignore 
+            // Boolean for making user a Discourse moderator. Leave null to ignore 
             'moderator' => null,
             
             // Full name on Discourse if the user is new or 
             // if SiteSetting.sso_overrides_name is set
             'name' => 'name',
 
-            // Groups to make sure that the user is *NOT* part of in a comma-separated string
+            // Discourse Groups to make sure that the user is *NOT* part of in a comma-separated string.
             // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
             // There is not a way to specify the exact list of groups that a user is in, so
             // you may want to send the inverse of the 'add_groups'
@@ -114,7 +117,7 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
 
 ```php
     /**
-     * Is the user a Discourse moderator.
+     * Is the user a Discourse moderator?
      *
      * @param  string  $value
      * @return boolean
@@ -129,7 +132,7 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
 
 * document Discourse configuration
 * send `log out` to Discourse when disabling/deleting the user
-* badges to user
+* badges for user
 * support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
 * failed login redirect
 * `return_paths` support
