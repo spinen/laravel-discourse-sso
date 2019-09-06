@@ -25,9 +25,9 @@
     "require-dev": {
         "mockery/mockery": "^1",
         "phpunit/phpunit": "~7.0.1|~8.0",
-        "psy/psysh": "^0.5.1",
-        "symfony/thanks": "^1.0",
-        "symfony/var-dumper": "~3.0|^4.2"
+        "psy/psysh": "^0.9.9",
+        "symfony/thanks": "^1.1",
+        "symfony/var-dumper": "^4.2"
     },
     "autoload": {
         "psr-4": {
