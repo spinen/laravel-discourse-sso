@@ -8,6 +8,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class SsoController
@@ -132,7 +133,7 @@ class SsoController extends Controller
             $this->buildExtraParameters()
         );
 
-        return redirect(str_finish($this->config->get('url'), '/').'session/sso_login?'.$query);
+        return redirect(Str::finish($this->config->get('url'), '/').'session/sso_login?'.$query);
     }
 
     /**
