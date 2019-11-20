@@ -3,7 +3,6 @@
 namespace Spinen\Discourse\Listeners;
 
 use GuzzleHttp\Client;
-use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
@@ -36,11 +35,11 @@ class LogoutDiscourseUser implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param Logout $event
+     * @param mixed $event
      *
      * @return void
      */
-    public function handle(Logout $event)
+    public function handle($event)
     {
         if (!$event->user) {
             return;
