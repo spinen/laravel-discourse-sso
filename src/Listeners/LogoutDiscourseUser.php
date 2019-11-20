@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class LogoutDiscourseUser
  *
- * When logging out a Laravel user, send a Logout request to Discourse for that user also.
+ * Send a Logout request to Discourse for the corresponding Laravel User.
  *
  * @package Spinen\Discourse\Listeners
  */
