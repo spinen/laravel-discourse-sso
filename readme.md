@@ -128,10 +128,28 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
     }
 ```
 
+## Logging out the Discourse User
+
+There's a listener in `src/Listeners/LogoutDiscourseUser.php` that will automatically log out the user from Discourse when certain events are fired. To use the Listener, [you need to register the event](https://laravel.com/docs/master/events#registering-events-and-listeners) in the `$listen` array in your `EventServiceProvider`.
+
+When a Laravel `User` logs out, to log out their Discourse session Simply add the Laravel `Logout` event & the `LogoutDiscourseUser` listener in that `$listen` array. If you want to log out Discourse users on a Laravel `User` being deleted or disabled, make your own event class and register it the same way.
+
+### Example
+
+```php
+    protected $listen = [
+        \Illuminate\Auth\Events\Logout::class => [
+            \Spinen\Discourse\Listeners\LogoutDiscourseUser::class,
+        ],
+        \App\Events\YourCustomEvent::class => [
+            \Spinen\Discourse\Listeners\LogoutDiscourseUser::class,
+        ],
+    ];
+```
+
 ## Left to do
 
 * document Discourse configuration
-* send `log out` to Discourse when disabling/deleting the user
 * badges for user
 * support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
 * failed login redirect
