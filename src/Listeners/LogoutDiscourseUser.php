@@ -3,6 +3,7 @@
 namespace Spinen\Discourse\Listeners;
 
 use GuzzleHttp\Client;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
@@ -21,15 +22,22 @@ class LogoutDiscourseUser implements ShouldQueue
     public $client;
 
     /**
+     * @var Repository
+     */
+    public $config_repository;
+
+    /**
      * Create the event listener.
      *
      * @param Client $client
+     * @param Repository $config_repository
      *
      * @return void
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, Repository $config_repository)
     {
         $this->client = $client;
+        $this->config_repository = $config_repository;
     }
 
     /**
@@ -46,10 +54,10 @@ class LogoutDiscourseUser implements ShouldQueue
         }
 
         $configs = [
-            'base_uri' => config('services.discourse.url'),
+            'base_uri' => $this->config_repository->get('services.discourse.url'),
             'headers'  => [
-                'Api-Key'      => config('services.discourse.api.key'),
-                'Api-Username' => config('services.discourse.api.user'),
+                'Api-Key'      => $this->config_repository->get('services.discourse.api.key'),
+                'Api-Username' => $this->config_repository->get('services.discourse.api.user'),
             ],
         ];
 
