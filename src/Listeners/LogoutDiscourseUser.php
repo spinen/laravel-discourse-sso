@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Log\Logger;
 
 /**
  * Class LogoutDiscourseUser
@@ -27,17 +28,24 @@ class LogoutDiscourseUser implements ShouldQueue
     public $config_repository;
 
     /**
+     * @var Logger
+     */
+    public $logger;
+
+    /**
      * Create the event listener.
      *
      * @param Client $client
      * @param Repository $config_repository
+     * @param Logger $logger
      *
      * @return void
      */
-    public function __construct(Client $client, Repository $config_repository)
+    public function __construct(Client $client, Repository $config_repository, Logger $logger)
     {
         $this->client = $client;
         $this->config_repository = $config_repository;
+        $this->logger = $logger;
     }
 
     /**
@@ -70,7 +78,7 @@ class LogoutDiscourseUser implements ShouldQueue
         $response = $this->client->post("admin/users/{$user->id}/log_out");
 
         if ($response->getStatusCode() !== 200) {
-            Log::notice(
+            $this->logger->notice(
                 "When logging out user {$event->user->id} Discourse returned status code {$response->getStatusCode()}:",
                 ['reason' => $response->getReasonPhrase()]
             );
