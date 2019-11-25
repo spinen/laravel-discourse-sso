@@ -19,12 +19,17 @@ use Spinen\Discourse\TestCase;
 class LogoutDiscourseUserTest extends TestCase
 {
     /**
-     * @var Repository
+     * @var Mockery\Mock
      */
     protected $config_mock;
 
     /**
-     * @var Client
+     * @var Mockery\Mock
+     */
+    protected $event_mock;
+
+    /**
+     * @var Mockery\Mock
      */
     protected $guzzle_mock;
 
@@ -37,6 +42,11 @@ class LogoutDiscourseUserTest extends TestCase
      * @var Mockery\Mock
      */
     protected $request_mock;
+
+    /**
+     * @var Mockery\Mock
+     */
+    protected $response_mock;
 
     /**
      * @var Mockery\Mock
@@ -56,9 +66,13 @@ class LogoutDiscourseUserTest extends TestCase
     {
         $this->config_mock = Mockery::mock(Config::class);
 
+        $this->event_mock = Mockery::mock(Logout::class);
+
         $this->guzzle_mock = Mockery::mock(Client::class);
 
         $this->request_mock = Mockery::mock(Request::class);
+
+        $this->response_mock = Mockery::mock(Response::class);
 
         $this->user_mock = Mockery::mock(User::class);
     }
@@ -86,11 +100,11 @@ class LogoutDiscourseUserTest extends TestCase
             ],
         ];
 
-        $response = Mockery::mock(Response::class);
-        $response->shouldReceive('getBody')
+        $this->response_mock->shouldReceive('getBody')
                  ->once()
                  ->andReturn(json_encode(['user' => $this->user_mock]));
-        $response->shouldReceive('getStatusCode')
+
+        $this->response_mock->shouldReceive('getStatusCode')
                  ->once()
                  ->andReturn(200);
 
@@ -112,16 +126,15 @@ class LogoutDiscourseUserTest extends TestCase
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
                           ->once()
-                          ->andReturn($response);
+                          ->andReturn($this->response_mock);
 
         $this->guzzle_mock->shouldReceive('post')
                           ->with('admin/users/1/log_out')
-                          ->andReturn($response);
+                          ->andReturn($this->response_mock);
 
-        $event = Mockery::mock(Logout::class);
-        $event->user = $this->user_mock;
+        $this->event_mock->user = $this->user_mock;
 
-        $this->listener->handle($event);
+        $this->listener->handle($this->event_mock);
     }
 
     /**
@@ -129,6 +142,11 @@ class LogoutDiscourseUserTest extends TestCase
      */
     public function if_it_receives_no_user_it_does_nothing_and_returns()
     {
-        $this->markTestIncomplete();
+        $this->response_mock->shouldNotReceive('getBody');
+        $this->config_mock->shouldNotReceive('get');
+        $this->guzzle_mock->shouldNotReceive('get');
+        $this->guzzle_mock->shouldNotReceive('post');
+
+        $this->listener->handle($this->event_mock);
     }
 }
