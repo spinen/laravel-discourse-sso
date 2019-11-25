@@ -2,12 +2,10 @@
 
 namespace Spinen\Discourse\Listeners;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Auth\Authenticatable as User;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Mockery;
