@@ -109,14 +109,6 @@ class LogoutDiscourseUserTest extends TestCase
             ],
         ];
 
-        $this->response_mock->shouldReceive('getBody')
-                 ->once()
-                 ->andReturn(json_encode(['user' => $this->user_mock]));
-
-        $this->response_mock->shouldReceive('getStatusCode')
-                 ->once()
-                 ->andReturn(200);
-
         $this->config_mock->shouldReceive('get')
                           ->with('services.discourse.url')
                           ->once()
@@ -131,6 +123,14 @@ class LogoutDiscourseUserTest extends TestCase
                           ->with('services.discourse.api.user')
                           ->once()
                           ->andReturn($configs['headers']['Api-Username']);
+
+        $this->response_mock->shouldReceive('getBody')
+                 ->once()
+                 ->andReturn(json_encode(['user' => $this->user_mock]));
+
+        $this->response_mock->shouldReceive('getStatusCode')
+                 ->once()
+                 ->andReturn(200);
 
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
@@ -176,17 +176,6 @@ class LogoutDiscourseUserTest extends TestCase
             ],
         ];
 
-        $this->response_mock->shouldReceive('getBody')
-                            ->once()
-                            ->andReturn(json_encode(['user' => $this->user_mock]));
-
-        $this->response_mock->shouldReceive('getStatusCode')
-                            ->andReturn(500);
-
-        $this->response_mock->shouldReceive('getReasonPhrase')
-                            ->once()
-                            ->andReturn('Server error');
-
         $this->config_mock->shouldReceive('get')
                           ->with('services.discourse.url')
                           ->once()
@@ -201,6 +190,17 @@ class LogoutDiscourseUserTest extends TestCase
                           ->with('services.discourse.api.user')
                           ->once()
                           ->andReturn($configs['headers']['Api-Username']);
+
+        $this->response_mock->shouldReceive('getBody')
+                            ->once()
+                            ->andReturn(json_encode(['user' => $this->user_mock]));
+
+        $this->response_mock->shouldReceive('getStatusCode')
+                            ->andReturn(500);
+
+        $this->response_mock->shouldReceive('getReasonPhrase')
+                            ->once()
+                            ->andReturn('Server error');
 
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
