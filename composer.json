@@ -18,7 +18,10 @@
     ],
     "require": {
         "php": ">=7.2",
+        "ext-json": "*",
         "cviebrock/discourse-php": "^0.9.3",
+        "guzzlehttp/guzzle": "^6.4",
+        "illuminate/auth": "~5.5|~6",
         "illuminate/routing": "~5.5|~6",
         "illuminate/support": "~5.5|~6"
     },
