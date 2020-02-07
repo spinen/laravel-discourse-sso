@@ -75,7 +75,7 @@ class LogoutDiscourseUser implements ShouldQueue
                          ->getBody()
         )->user;
 
-        $response = $this->client->post("admin/users/{$user->id}/log_out");
+        $response = $this->client->post("admin/users/{$user->id}/log_out", $configs);
 
         if ($response->getStatusCode() !== 200) {
             $this->logger->notice(
