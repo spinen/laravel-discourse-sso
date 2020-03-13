@@ -62,7 +62,11 @@ class LogoutDiscourseUser implements ShouldQueue
         }
 
         $configs = [
-            'base_uri' => $this->config_repository->get('services.discourse.url')
+            'base_uri' => $this->config_repository->get('services.discourse.url'),
+            'headers'  => [
+                'Api-Key'      => $this->config_repository->get('services.discourse.api_key'),
+                'Api-Username' => $this->config_repository->get('services.discourse.api_user'),
+            ],
         ];
 
         // Get Discourse user to match this one, and send a Logout request to Discourse and get the response
@@ -70,15 +74,6 @@ class LogoutDiscourseUser implements ShouldQueue
             $this->client->get("users/by-external/{$event->user->id}.json", $configs)
                          ->getBody()
         )->user;
-        
-
-        $configs = [
-            'base_uri' => $this->config_repository->get('services.discourse.url'),
-            'headers'  => [
-                'Api-Key'      => $this->config_repository->get('services.discourse.api_key'),
-                'Api-Username' => $this->config_repository->get('services.discourse.api_user'),
-            ],
-        ];
 
         $response = $this->client->post("admin/users/{$user->id}/log_out", $configs);
 
