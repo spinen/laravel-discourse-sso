@@ -64,8 +64,8 @@ class LogoutDiscourseUser implements ShouldQueue
         $configs = [
             'base_uri' => $this->config_repository->get('services.discourse.url'),
             'headers'  => [
-                'Api-Key'      => $this->config_repository->get('services.discourse.api_key'),
-                'Api-Username' => $this->config_repository->get('services.discourse.api_user'),
+                'Api-Key'      => $this->config_repository->get('services.discourse.api.key'),
+                'Api-Username' => $this->config_repository->get('services.discourse.api.user'),
             ],
         ];
 
