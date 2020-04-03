@@ -70,18 +70,19 @@ class LogoutDiscourseUser implements ShouldQueue
         ];
 
         // Get Discourse user to match this one, and send a Logout request to Discourse and get the response
-        $user = json_decode(
-            $this->client->get("users/by-external/{$event->user->id}.json", $configs)
-                         ->getBody()
-        )->user;
+        $response = $this->client->get("users/by-external/{$event->user->id}.json", $configs);
+        if ($response->getStatusCode() === 200) {
+            $user = json_decode($response->getBody())->user;
+            
 
-        $response = $this->client->post("admin/users/{$user->id}/log_out");
+            $response = $this->client->post("admin/users/{$user->id}/log_out", $configs);
 
-        if ($response->getStatusCode() !== 200) {
-            $this->logger->notice(
-                "When logging out user {$event->user->id} Discourse returned status code {$response->getStatusCode()}:",
-                ['reason' => $response->getReasonPhrase()]
-            );
+            if ($response->getStatusCode() !== 200) {
+                $this->logger->notice(
+                    "When logging out user {$event->user->id} Discourse returned status code {$response->getStatusCode()}:",
+                    ['reason' => $response->getReasonPhrase()]
+                );
+            }
         }
     }
 }
