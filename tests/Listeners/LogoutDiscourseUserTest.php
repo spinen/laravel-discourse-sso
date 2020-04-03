@@ -129,7 +129,7 @@ class LogoutDiscourseUserTest extends TestCase
                  ->andReturn(json_encode(['user' => $this->user_mock]));
 
         $this->response_mock->shouldReceive('getStatusCode')
-                 ->once()
+                 ->twice()
                  ->andReturn(200);
 
         $this->guzzle_mock->shouldReceive('get')
@@ -138,7 +138,7 @@ class LogoutDiscourseUserTest extends TestCase
                           ->andReturn($this->response_mock);
 
         $this->guzzle_mock->shouldReceive('post')
-                          ->with('admin/users/1/log_out')
+                          ->with('admin/users/1/log_out', $configs)
                           ->andReturn($this->response_mock);
 
         $this->listener->handle($this->event_mock);
@@ -160,13 +160,12 @@ class LogoutDiscourseUserTest extends TestCase
     /**
      * @test
      */
-    public function if_discourse_response_code_is_not_200_log_a_notice_with_the_status_code()
+    public function on_getting_user_if_discourse_response_code_is_not_200_log_a_warning_with_the_status_code()
     {
         $this->user_mock->id = 1;
         $this->event_mock->user = $this->user_mock;
 
-        $this->logger_mock->shouldReceive('notice')->once();
-
+        $this->logger_mock->shouldReceive('warning')->once();
 
         $configs = [
             'base_uri' => 'http://discourse.example.com',
@@ -191,10 +190,6 @@ class LogoutDiscourseUserTest extends TestCase
                           ->once()
                           ->andReturn($configs['headers']['Api-Username']);
 
-        $this->response_mock->shouldReceive('getBody')
-                            ->once()
-                            ->andReturn(json_encode(['user' => $this->user_mock]));
-
         $this->response_mock->shouldReceive('getStatusCode')
                             ->andReturn(500);
 
@@ -207,8 +202,66 @@ class LogoutDiscourseUserTest extends TestCase
                           ->once()
                           ->andReturn($this->response_mock);
 
+        $this->listener->handle($this->event_mock);
+    }
+
+    /**
+     * @test
+     */
+    public function on_user_logout_if_discourse_response_code_is_not_200_log_a_notice_with_the_status_code()
+    {
+        $this->user_mock->id = 1;
+        $this->event_mock->user = $this->user_mock;
+
+        $this->logger_mock->shouldReceive('notice')->once();
+
+        $configs = [
+            'base_uri' => 'http://discourse.example.com',
+            'headers'  => [
+                'Api-Key'      => 'testkey',
+                'Api-Username' => 'testuser',
+            ],
+        ];
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.url')
+                          ->once()
+                          ->andReturn($configs['base_uri']);
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.api.key')
+                          ->once()
+                          ->andReturn($configs['headers']['Api-Key']);
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.api.user')
+                          ->once()
+                          ->andReturn($configs['headers']['Api-Username']);
+
+        $this->response_mock->shouldReceive('getStatusCode')
+                            ->andReturn(500);
+
+        $this->response_mock->shouldReceive('getReasonPhrase')
+                            ->once()
+                            ->andReturn('Server error');
+
+        $good_response = Mockery::mock(Response::class);
+
+        $good_response->shouldReceive('getStatusCode')
+                      ->once()
+                      ->andReturn(200);
+
+        $good_response->shouldReceive('getBody')
+                            ->once()
+                            ->andReturn(json_encode(['user' => $this->user_mock]));
+
+        $this->guzzle_mock->shouldReceive('get')
+                          ->with('users/by-external/1.json', $configs)
+                          ->once()
+                          ->andReturn($good_response);
+
         $this->guzzle_mock->shouldReceive('post')
-                          ->with('admin/users/1/log_out')
+                          ->with('admin/users/1/log_out', $configs)
                           ->andReturn($this->response_mock);
 
         $this->listener->handle($this->event_mock);
