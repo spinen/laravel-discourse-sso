@@ -32,7 +32,7 @@ $ composer require spinen/laravel-discourse-sso
 
 The package uses the [auto registration feature](https://laravel.com/docs/5.8/packages#package-discovery) of Laravel 5.
 
-## Configuration
+## Package Configuration
 
 All of the configuration values are stored in under a `discourse` key in `config/services.php`.  Here is the array to add...
 
@@ -128,6 +128,40 @@ You can then add logic to the `User` model inside of [Accessors](https://laravel
     }
 ```
 
+## Discourse Configuration
+### Settings -> Login
+These are the configs we have under `Settings -> Login`. If a setting isn't listed, then ours is set to the default value.
+
+| **Setting**              | **Value**                                                |
+|--------------------------|----------------------------------------------------------|
+| login required           | true                                                     |
+| enable sso               | true                                                     |
+| sso url                  | Our Laravel's SSO route (FQDN)                           |
+| sso secret               | Our SSO secret key                                       |
+| sso overrides bio        | true                                                     |
+| sso overrides email      | true                                                     |
+| sso overrides username   | true                                                     |
+| sso overrides name       | true                                                     |
+| sso overrides avatar     | true                                                     |
+| sso not approved url     | Our Laravel homepage (same as `url` in `config/app.php`) |
+| hide email address taken | true                                                     |
+_______________________________________________________________________
+
+
+### Settings -> Users
+These are the configs we have under `Settings -> Users`. If a setting isn't listed, then ours is set to the default value.
+
+| **Setting**                               | **Value**                                                |
+|-------------------------------------------|----------------------------------------------------------|
+| reserved usernames                        | We added our client's company name                       |
+| min password length                       | 8                                                        |
+| min admin password length                 | 8                                                        |
+| email editable                            | false                                                    |
+| logout redirect                           | Our Laravel homepage (same as `url` in `config/app.php`) |
+| purge unactivated users grace period days | 30                                                       |
+| hide user profiles from public            | true                                                     |
+_______________________________________________________________________
+
 ## Logging out the Discourse User
 
 There's a listener in `src/Listeners/LogoutDiscourseUser.php` that will automatically log out the user from Discourse when certain events are fired. To use the Listener, [you need to register the event](https://laravel.com/docs/master/events#registering-events-and-listeners) in the `$listen` array in your `EventServiceProvider`.
@@ -149,7 +183,6 @@ When a Laravel `User` logs out, to log out their Discourse session Simply add th
 
 ## Left to do
 
-* document Discourse configuration
 * badges for user
 * support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
 * failed login redirect
