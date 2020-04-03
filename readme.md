@@ -147,9 +147,44 @@ When a Laravel `User` logs out, to log out their Discourse session Simply add th
     ];
 ```
 
+## Discourse Configuration
+
+### Settings -> Login
+These are the configs we have under `Settings -> Login`. If a setting isn't listed, then ours is set to the default value.
+
+| **Setting**              | **Value**                      |
+|--------------------------|--------------------------------|
+| login required           | true                           |
+| enable sso               | true                           |
+| sso url                  | Our Laravel's SSO route (FQDN) |
+| sso secret               | Our SSO secret key             |
+| sso overrides bio        | true                           |
+| sso overrides email      | true                           |
+| sso overrides username   | true                           |
+| sso overrides name       | true                           |
+| sso overrides avatar     | true                           |
+| sso not approved url     | Our Laravel homepage (FQDN)    |
+| hide email address taken | true                           |
+_______________________________________________________________________
+
+
+### Settings -> Users
+These are the configs we have under `Settings -> Users`. If a setting isn't listed, then ours is set to the default value.
+
+| **Setting**                               | **Value**                          |
+|-------------------------------------------|------------------------------------|
+| reserved usernames                        | We added our client's company name |
+| min password length                       | 8                                  |
+| min admin password length                 | 8                                  |
+| email editable                            | false                              |
+| logout redirect                           | Our Laravel homepage (FQDN)        |
+| purge unactivated users grace period days | 30                                 |
+| hide user profiles from public            | true                               |
+_______________________________________________________________________
+
+
 ## Left to do
 
-* document Discourse configuration
 * badges for user
 * support for [`custom_fields`](https://meta.discourse.org/t/custom-user-fields-for-plugins/14956)
 * failed login redirect
