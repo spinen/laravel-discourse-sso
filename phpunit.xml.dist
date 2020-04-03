@@ -48,7 +48,7 @@
              showOnlySummary="true"
              showUncoveredFiles="false"/>
         <log type="coverage-clover" target="build/phpunit/logs/clover.xml"/>
-        <log type="json" target="./build/phpunit/logs/logfile.json"/>
+        <log type="plain" target="./build/phpunit/logs/logfile.log"/>
         <log type="junit" target="./build/phpunit/logs/junit.xml"/>
     </logging>
 </phpunit>
