@@ -55,6 +55,17 @@ All of the configuration values are stored in under a `discourse` key in `config
         // Where the Discourse forum lives
         'url' => env('DISCOURSE_URL'),
         
+        // Api-specific items
+        // NOTE: Generate a key generated in forum admin as "All user key" and the api.user the username of admin user (see this guide https://meta.discourse.org/t/how-to-create-an-api-key-on-the-admin-panel/87383)
+        'api' => [
+            // Check to see if the user has forum access & should be logged in via SSO
+            'key' => env('DISCOURSE_API_KEY'),
+        
+            // Discourse Groups to make sure that the user is part of in a comma-separated string
+            // NOTE: Groups cannot have spaces in their names & must already exist in Discourse
+            'user' => env('DISCOURSE_API_USER'),
+        ],
+
         // User-specific items
         // NOTE: The 'email' & 'external_id' are the only 2 required fields
         'user' => [
