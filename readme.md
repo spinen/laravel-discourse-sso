@@ -55,6 +55,14 @@ All of the configuration values are stored in under a `discourse` key in `config
         // Where the Discourse forum lives
         'url' => env('DISCOURSE_URL'),
         
+        // Api-specific items
+        // For logging out of Discourse directly, generate an API key as an "All user key" and put the key & user here.
+        // @see https://meta.discourse.org/t/how-to-create-an-api-key-on-the-admin-panel/87383
+        'api' => [
+            'key' => env('DISCOURSE_API_KEY'),
+            'user' => env('DISCOURSE_API_USER'),
+        ],
+
         // User-specific items
         // NOTE: The 'email' & 'external_id' are the only 2 required fields
         'user' => [
