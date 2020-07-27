@@ -56,7 +56,8 @@ All of the configuration values are stored in under a `discourse` key in `config
         'url' => env('DISCOURSE_URL'),
         
         // Api-specific items
-        // NOTE: Generate a key generated in forum admin as "All user key" and the api.user the username of admin user (see this guide https://meta.discourse.org/t/how-to-create-an-api-key-on-the-admin-panel/87383)
+        // For logging out of Discourse directly, generate an API key as an "All user key" and put the key & user here.
+        // @see https://meta.discourse.org/t/how-to-create-an-api-key-on-the-admin-panel/87383
         'api' => [
             'key' => env('DISCOURSE_API_KEY'),
             'user' => env('DISCOURSE_API_USER'),
