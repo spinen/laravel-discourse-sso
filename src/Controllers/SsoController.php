@@ -152,7 +152,7 @@ class SsoController extends Controller
      *
      * If a string is passed in, then get it from the user object, otherwise, return what was given
      *
-     * @param string $property
+     * @param mixed $property
      * @return mixed
      */
     public function parseUserValue($property)
