@@ -3,6 +3,7 @@
 namespace Spinen\Discourse\Listeners;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -69,8 +70,12 @@ class LogoutDiscourseUser implements ShouldQueue
             ],
         ];
 
-        // Get Discourse user to match this one, and send a Logout request to Discourse and get the response
-        $response = $this->client->get("users/by-external/{$event->user->id}.json", $configs);
+        try {
+            // Get Discourse user to match this one, and send a Logout request to Discourse and get the response
+            $response = $this->client->get("users/by-external/{$event->user->id}.json", $configs);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+        }
 
         if ($response->getStatusCode() !== 200) {
             $this->logger->warning(
