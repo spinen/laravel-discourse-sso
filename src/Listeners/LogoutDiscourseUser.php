@@ -78,7 +78,7 @@ class LogoutDiscourseUser implements ShouldQueue
         }
 
         if ($response->getStatusCode() !== 200) {
-            $this->logger->warning(
+            $this->logger->error(
                 "When getting user {$event->user->id} Discourse returned status code {$response->getStatusCode()}",
                 ['reason' => $response->getReasonPhrase()]
             );
