@@ -129,7 +129,7 @@ class LogoutDiscourseUserTest extends TestCase
 
         $this->response_mock->shouldReceive('getBody')
                  ->once()
-                 ->andReturn(json_encode(['user' => $this->user_mock]));
+                 ->andReturn((new Response(200, [], json_encode(['user' => $this->user_mock])))->getBody());
 
         $this->response_mock->shouldReceive('getStatusCode')
                  ->twice()
@@ -262,7 +262,7 @@ class LogoutDiscourseUserTest extends TestCase
 
         $good_response->shouldReceive('getBody')
                             ->once()
-                            ->andReturn(json_encode(['user' => $this->user_mock]));
+                            ->andReturn((new Response(200, [], json_encode(['user' => $this->user_mock])))->getBody());
 
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
