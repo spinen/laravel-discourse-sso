@@ -3,12 +3,15 @@
 namespace Spinen\Discourse\Listeners;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Mockery;
+use Psr\Http\Message\ResponseInterface;
+use Ramsey\Collection\AbstractArray;
 use Spinen\Discourse\TestCase;
 use Symfony\Component\HttpKernel\Log\Logger;
 
@@ -126,7 +129,7 @@ class LogoutDiscourseUserTest extends TestCase
 
         $this->response_mock->shouldReceive('getBody')
                  ->once()
-                 ->andReturn(json_encode(['user' => $this->user_mock]));
+                 ->andReturn((new Response(200, [], json_encode(['user' => $this->user_mock])))->getBody());
 
         $this->response_mock->shouldReceive('getStatusCode')
                  ->twice()
@@ -160,12 +163,13 @@ class LogoutDiscourseUserTest extends TestCase
     /**
      * @test
      */
-    public function on_getting_user_if_discourse_response_code_is_not_200_log_a_warning_with_the_status_code()
+    public function on_getting_user_if_discourse_response_code_is_not_200_log_an_error_with_the_status_code()
     {
         $this->user_mock->id = 1;
         $this->event_mock->user = $this->user_mock;
+        $exception_mock = Mockery::mock(BadResponseException::class);
 
-        $this->logger_mock->shouldReceive('warning')->once();
+        $this->logger_mock->shouldReceive('error')->once();
 
         $configs = [
             'base_uri' => 'http://discourse.example.com',
@@ -190,6 +194,10 @@ class LogoutDiscourseUserTest extends TestCase
                           ->once()
                           ->andReturn($configs['headers']['Api-Username']);
 
+        $exception_mock->shouldReceive('getResponse')
+                       ->once()
+                       ->andReturn($this->response_mock);
+
         $this->response_mock->shouldReceive('getStatusCode')
                             ->andReturn(500);
 
@@ -200,7 +208,8 @@ class LogoutDiscourseUserTest extends TestCase
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
                           ->once()
-                          ->andReturn($this->response_mock);
+                          ->andReturn($this->response_mock)
+                          ->andThrow($exception_mock, 'Bad Response', 500);
 
         $this->listener->handle($this->event_mock);
     }
@@ -253,7 +262,7 @@ class LogoutDiscourseUserTest extends TestCase
 
         $good_response->shouldReceive('getBody')
                             ->once()
-                            ->andReturn(json_encode(['user' => $this->user_mock]));
+                            ->andReturn((new Response(200, [], json_encode(['user' => $this->user_mock])))->getBody());
 
         $this->guzzle_mock->shouldReceive('get')
                           ->with('users/by-external/1.json', $configs)
