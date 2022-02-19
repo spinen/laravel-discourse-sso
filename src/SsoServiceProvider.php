@@ -25,8 +25,9 @@ class SsoServiceProvider extends ServiceProvider
                 $router->get(
                     $this->app['config']->get('services.discourse.route'),
                     [
-                        'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
                         'as'   => 'sso.login',
+                        'domain' => $this->app['config']->get('services.discourse.domain', null),
+                        'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
                     ]
                 );
             }
