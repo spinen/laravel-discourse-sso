@@ -10,15 +10,11 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Mockery;
-use Psr\Http\Message\ResponseInterface;
-use Ramsey\Collection\AbstractArray;
 use Spinen\Discourse\TestCase;
 use Symfony\Component\HttpKernel\Log\Logger;
 
 /**
  * Class LogoutDiscourseUserTest
- *
- * @package Spinen\Discourse\Listeners
  */
 class LogoutDiscourseUserTest extends TestCase
 {
@@ -106,8 +102,8 @@ class LogoutDiscourseUserTest extends TestCase
 
         $configs = [
             'base_uri' => 'http://discourse.example.com',
-            'headers'  => [
-                'Api-Key'      => 'testkey',
+            'headers' => [
+                'Api-Key' => 'testkey',
                 'Api-Username' => 'testuser',
             ],
         ];
@@ -173,8 +169,8 @@ class LogoutDiscourseUserTest extends TestCase
 
         $configs = [
             'base_uri' => 'http://discourse.example.com',
-            'headers'  => [
-                'Api-Key'      => 'testkey',
+            'headers' => [
+                'Api-Key' => 'testkey',
                 'Api-Username' => 'testuser',
             ],
         ];
@@ -226,8 +222,8 @@ class LogoutDiscourseUserTest extends TestCase
 
         $configs = [
             'base_uri' => 'http://discourse.example.com',
-            'headers'  => [
-                'Api-Key'      => 'testkey',
+            'headers' => [
+                'Api-Key' => 'testkey',
                 'Api-Username' => 'testuser',
             ],
         ];

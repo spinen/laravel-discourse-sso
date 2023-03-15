@@ -10,8 +10,6 @@ use Mockery;
 
 /**
  * Class SsoServiceProviderTest
- *
- * @package Spinen\Discourse
  */
 class SsoServiceProviderTest extends TestCase
 {
@@ -80,7 +78,7 @@ class SsoServiceProviderTest extends TestCase
                                ->andReturn($this->router_mock);
 
         $this->application_mock->shouldReceive('offsetGet')
-                               ->twice()
+                               ->times(3)
                                ->with('config')
                                ->andReturn($this->config_mock);
 
@@ -88,6 +86,11 @@ class SsoServiceProviderTest extends TestCase
                           ->with('services.discourse.middleware', ['web', 'auth'])
                           ->once()
                           ->andReturn(['middleware']);
+
+        $this->config_mock->shouldReceive('get')
+                          ->with('services.discourse.domain', null)
+                          ->once()
+                          ->andReturn('domain');
 
         $this->config_mock->shouldReceive('get')
                           ->with('services.discourse.route')
@@ -99,8 +102,9 @@ class SsoServiceProviderTest extends TestCase
                               [
                                   'route',
                                   [
+                                      'as' => 'sso.login',
+                                      'domain' => 'domain',
                                       'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
-                                      'as'   => 'sso.login',
                                   ],
                               ]
                           )
@@ -109,7 +113,6 @@ class SsoServiceProviderTest extends TestCase
 
         $route_closure = Mockery::on(
             function ($closure) {
-
                 $closure($this->router_mock);
 
                 return true;

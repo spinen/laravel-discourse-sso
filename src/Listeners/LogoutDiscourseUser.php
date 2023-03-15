@@ -6,39 +6,32 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Log\Logger;
 
 /**
  * Class LogoutDiscourseUser
  *
  * Send a Logout request to Discourse for the corresponding Laravel User.
- *
- * @package Spinen\Discourse\Listeners
  */
 class LogoutDiscourseUser implements ShouldQueue
 {
     /**
-     * @var Client
+     * The client instance
      */
-    public $client;
+    public Client $client;
 
     /**
-     * @var Repository
+     * @The repository instance
      */
-    public $config_repository;
+    public Repository $config_repository;
 
     /**
-     * @var Logger
+     * The logger instance
      */
-    public $logger;
+    public Logger $logger;
 
     /**
      * Create the event listener.
-     *
-     * @param Client $client
-     * @param Repository $config_repository
-     * @param Logger $logger
      *
      * @return void
      */
@@ -52,20 +45,18 @@ class LogoutDiscourseUser implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param mixed $event
-     *
      * @return void
      */
     public function handle($event)
     {
-        if (!$event->user) {
+        if (! $event->user) {
             return;
         }
 
         $configs = [
             'base_uri' => $this->config_repository->get('services.discourse.url'),
-            'headers'  => [
-                'Api-Key'      => $this->config_repository->get('services.discourse.api.key'),
+            'headers' => [
+                'Api-Key' => $this->config_repository->get('services.discourse.api.key'),
                 'Api-Username' => $this->config_repository->get('services.discourse.api.user'),
             ],
         ];
@@ -82,6 +73,7 @@ class LogoutDiscourseUser implements ShouldQueue
                 "When getting user {$event->user->id} Discourse returned status code {$response->getStatusCode()}",
                 ['reason' => $response->getReasonPhrase()]
             );
+
             return;
         }
 
