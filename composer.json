@@ -29,6 +29,7 @@
         "illuminate/support": "~8|~9|~10"
     },
     "require-dev": {
+        "laravel/sail": "^1.21",
         "mockery/mockery": "^1.5.1",
         "phpunit/phpunit": "^9.6.5",
         "psy/psysh": "^0.11.1",
