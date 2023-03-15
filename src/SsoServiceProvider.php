@@ -7,8 +7,6 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * Class SsoServiceProvider
- *
- * @package Spinen\Discourse
  */
 class SsoServiceProvider extends ServiceProvider
 {
@@ -25,7 +23,7 @@ class SsoServiceProvider extends ServiceProvider
                 $router->get(
                     $this->app['config']->get('services.discourse.route'),
                     [
-                        'as'   => 'sso.login',
+                        'as' => 'sso.login',
                         'domain' => $this->app['config']->get('services.discourse.domain', null),
                         'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
                     ]
