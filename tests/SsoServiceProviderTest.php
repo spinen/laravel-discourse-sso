@@ -10,8 +10,6 @@ use Mockery;
 
 /**
  * Class SsoServiceProviderTest
- *
- * @package Spinen\Discourse
  */
 class SsoServiceProviderTest extends TestCase
 {
@@ -104,9 +102,9 @@ class SsoServiceProviderTest extends TestCase
                               [
                                   'route',
                                   [
-                                      'as'     => 'sso.login',
+                                      'as' => 'sso.login',
                                       'domain' => 'domain',
-                                      'uses'   => 'Spinen\Discourse\Controllers\SsoController@login',
+                                      'uses' => 'Spinen\Discourse\Controllers\SsoController@login',
                                   ],
                               ]
                           )
@@ -115,7 +113,6 @@ class SsoServiceProviderTest extends TestCase
 
         $route_closure = Mockery::on(
             function ($closure) {
-
                 $closure($this->router_mock);
 
                 return true;

@@ -12,8 +12,6 @@ use Spinen\Discourse\TestCase;
 
 /**
  * Class SsoControllerTest
- *
- * @package Spinen\Discourse\Controllers
  */
 class SsoControllerTest extends TestCase
 {
@@ -89,7 +87,7 @@ class SsoControllerTest extends TestCase
                           ->with('services.discourse')
                           ->andReturn([
                               'secret' => 'secret',
-                              'user'   => [
+                              'user' => [
                                   'access' => null,
                               ],
                           ]);
@@ -151,7 +149,6 @@ class SsoControllerTest extends TestCase
         $controller = new SsoController($this->config_mock, $this->sso_helper_mock);
 
         $controller->login($this->request_mock);
-
     }
 
     /**
@@ -167,7 +164,7 @@ class SsoControllerTest extends TestCase
                           ->with('services.discourse')
                           ->andReturn([
                               'secret' => 'secret',
-                              'user'   => [
+                              'user' => [
                                   'access' => 'forum_access',
                               ],
                           ]);
@@ -195,14 +192,14 @@ class SsoControllerTest extends TestCase
                           ->andReturn([
                               'secret' => 'secret',
                               // Expect the '/' on the end to not double up
-                              'url'    => 'http://discourse/',
-                              'user'   => [
-                                  'external_id'  => 'id',
-                                  'email'        => 'email',
+                              'url' => 'http://discourse/',
+                              'user' => [
+                                  'external_id' => 'id',
+                                  'email' => 'email',
                                   // Expect this null_value to not be passed on
-                                  'null_value'   => null,
-                                  'false_value'  => false,
-                                  'true_value'   => true,
+                                  'null_value' => null,
+                                  'false_value' => false,
+                                  'true_value' => true,
                                   'string_value' => 'string',
                               ],
                           ]);
@@ -243,8 +240,8 @@ class SsoControllerTest extends TestCase
                                   1,
                                   'me@mydomain.tld',
                                   [
-                                      'false_value'  => 'false',
-                                      'true_value'   => 'true',
+                                      'false_value' => 'false',
+                                      'true_value' => 'true',
                                       'string_value' => 'string_property',
                                   ],
                               ])
@@ -258,7 +255,7 @@ class SsoControllerTest extends TestCase
 
 function abort($code)
 {
-    throw new Exception("Some error message", $code);
+    throw new Exception('Some error message', $code);
 }
 
 function redirect($path)

@@ -16,37 +16,26 @@ use Illuminate\Support\Str;
  * Controller to process the Discourse SSO request.  There is a good bit of logic in here that almost feels like too
  * much for a controller, but given that this is the only thing that this controller is doing, I am not going to break
  * it out into a service class.
- *
- * @package Spinen\Discourse\Controllers
  */
 class SsoController extends Controller
 {
     /**
      * Package configuration
-     *
-     * @var Collection
      */
-    protected $config;
+    protected Collection $config;
 
     /**
      * SSOHelper Instance
-     *
-     * @var SSOHelper
      */
-    protected $sso;
+    protected SSOHelper $sso;
 
     /**
      * Authenticated user
-     *
-     * @var User
      */
-    protected $user;
+    protected User $user;
 
     /**
      * SsoController constructor.
-     *
-     * @param Config $config
-     * @param SSOHelper $sso
      */
     public function __construct(Config $config, SSOHelper $sso)
     {
@@ -57,10 +46,8 @@ class SsoController extends Controller
 
     /**
      * Build out the extra parameters to send to Discourse
-     *
-     * @return array
      */
-    protected function buildExtraParameters()
+    protected function buildExtraParameters(): array
     {
         return $this->config->get('user')
                             ->except(['access', 'email', 'external_id'])
@@ -75,12 +62,8 @@ class SsoController extends Controller
      *
      * The Discourse SSO API does not accept 0 or 1 for false or true.  You must send
      * "false" or "true", so convert any boolean property to the string version.
-     *
-     * @param $property
-     *
-     * @return string
      */
-    public function castBooleansToString($property)
+    public function castBooleansToString(string|bool $property): string
     {
         if (! is_bool($property)) {
             return $property;
@@ -93,10 +76,8 @@ class SsoController extends Controller
      * Cache the configs on the object as a collection
      *
      * The 'user' property will be an array, so go ahead and convert it to a collection
-     *
-     * @param Config $config
      */
-    protected function loadConfigs(Config $config)
+    protected function loadConfigs(Config $config): void
     {
         $this->config = collect($config->get('services.discourse'));
         $this->config->put('user', collect($this->config->get('user')));
@@ -105,9 +86,6 @@ class SsoController extends Controller
     /**
      * Process the SSO login request from Discourse
      *
-     * @param Request $request
-     *
-     * @return mixed
      * @throws 403
      */
     public function login(Request $request)
@@ -138,11 +116,8 @@ class SsoController extends Controller
 
     /**
      * Check to see if property is null
-     *
-     * @param string $property
-     * @return bool
      */
-    public function nullProperty($property)
+    public function nullProperty(?string $property): bool
     {
         return is_null($property);
     }
@@ -151,9 +126,6 @@ class SsoController extends Controller
      * Get the property from the user
      *
      * If a string is passed in, then get it from the user object, otherwise, return what was given
-     *
-     * @param mixed $property
-     * @return mixed
      */
     public function parseUserValue($property)
     {
