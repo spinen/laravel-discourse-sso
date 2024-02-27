@@ -24,15 +24,15 @@
         "php": ">=8.1",
         "cviebrock/discourse-php": "^0.9.3",
         "guzzlehttp/guzzle": "^7.4.5",
-        "illuminate/auth": "~8|~9|~10",
-        "illuminate/routing": "~8|~9|~10",
-        "illuminate/support": "~8|~9|~10"
+        "illuminate/auth": "~8|~9|~10|^11.0",
+        "illuminate/routing": "~8|~9|~10|^11.0",
+        "illuminate/support": "~8|~9|~10|^11.0"
     },
     "require-dev": {
         "laravel/sail": "^1.21",
         "mockery/mockery": "^1.5.1",
-        "phpunit/phpunit": "^9.6.5",
-        "psy/psysh": "^0.11.1",
+        "phpunit/phpunit": "^9.6.5|^10.5",
+        "psy/psysh": "^0.11.1|^0.12",
         "symfony/var-dumper": "^6.2"
     },
     "autoload": {
