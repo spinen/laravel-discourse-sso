@@ -192,6 +192,25 @@ When a Laravel `User` logs out, to log out their Discourse session Simply add th
     ];
 ```
 
+### Laravel 11
+
+In Laravel 11, the use of the `EventServiceProvider` is discouraged and events [should be registered in the `AppServiceProvider`](https://laravel.com/docs/11.x/events#manually-registering-events).
+
+Therefore, the implementation is slightly different, and it should be registered within the `boot` method of the `AppServiceProvider` as per the example below.
+
+```php
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Event::listen(
+            \Illuminate\Auth\Events\Logout::class,
+            \Spinen\Discourse\Listeners\LogoutDiscourseUser::class
+        );
+    }
+```
+
 ## Left to do
 
 * badges for user
